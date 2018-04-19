@@ -1,14 +1,37 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import Expo from 'expo';
+import { Root } from 'native-base';
+import { StackNavigator, DrawerNavigator } from 'react-navigation';
+import RobotFont from 'native-base/Fonts/Roboto.ttf';
+import RobotMediumFont from 'native-base/Fonts/Roboto_medium.ttf';
+
+import Home from './screens/home';
+import SideBar from './screens/sidebar';
+
+const Drawer = DrawerNavigator({
+  Home: { screen: Home },
+}, {
+  initialRouteName: 'Home',
+  contentOptions: {
+    activeTintColor: '#e91e63',
+  },
+  contentComponent: props => <SideBar {...props} />,
+});
+
+const AppNavigator = StackNavigator({
+  Drawer: { screen: Drawer },
+}, {
+  initialRouteName: 'Drawer',
+  headerMode: 'none',
+});
 
 export default class App extends React.Component {
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
-      </View>
+      <Root>
+        <AppNavigator />
+      </Root>
     );
   }
 }
