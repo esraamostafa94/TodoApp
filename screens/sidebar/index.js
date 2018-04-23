@@ -5,6 +5,7 @@ import {
   ListItem,
   Container,
   Content,
+  // View,
 } from 'native-base';
 import styles from './styles';
 
@@ -26,7 +27,7 @@ const datas = [
 const SideBar = props => (
   <Container>
     <Content
-      style={{ flex: 1, backgroundColor: '#fff', top: -1 }}
+      style={{ flex: 1, backgroundColor: '#fff', top: 1 }}
     >
       <List
         dataArray={datas}
