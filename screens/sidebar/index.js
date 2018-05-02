@@ -5,20 +5,27 @@ import {
   ListItem,
   Container,
   Content,
+  Header,
   // View,
 } from 'native-base';
 import styles from './styles';
 
 const datas = [
   {
-    name: 'Home',
+    name: 'TODO List',
     route: 'Home',
     icon: 'phone-portrait',
     bg: '#C5F442',
   },
   {
-    name: 'Page 2',
-    route: 'page2',
+    name: 'Collection List',
+    route: 'Collection',
+    icon: 'phone-portrait',
+    bg: '#C5F442',
+  },
+  {
+    name: 'User List',
+    route: 'User',
     icon: 'phone-portrait',
     bg: '#C5F442',
   },
@@ -26,6 +33,7 @@ const datas = [
 
 const SideBar = props => (
   <Container>
+    <Header />
     <Content
       style={{ flex: 1, backgroundColor: '#fff', top: 1 }}
     >
