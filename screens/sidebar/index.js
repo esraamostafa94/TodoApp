@@ -14,7 +14,7 @@ const datas = [
   {
     name: 'TODO List',
     route: 'Home',
-    icon: 'phone-portrait',
+    icon: 'home',
     bg: '#C5F442',
   },
   {

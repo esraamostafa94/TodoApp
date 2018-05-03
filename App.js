@@ -12,7 +12,8 @@ import SideBar from './screens/sidebar';
 import Collection from './screens/collection';
 import User from './screens/user';
 
-import CreateTask from './screens/home/CreateTask';
+import CreateEditTask from './screens/home/CreateEditTask';
+// import EditTask from './screens/home/EditTask';
 import CreateCollection from './screens/collection/CreateCollection';
 import CreateUser from './screens/user/CreateUser';
 
@@ -40,7 +41,8 @@ const Drawer = DrawerNavigator({
 // All navigation
 const AppNavigator = StackNavigator({
   Drawer: { screen: Drawer },
-  CreateTask: { screen: CreateTask },
+  CreateEditTask: { screen: CreateEditTask },
+  // EditTask: { screen: EditTask },
   CreateCollection: { screen: CreateCollection },
   CreateUser: { screen: CreateUser },
 }, {

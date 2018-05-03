@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import {
-  View,
+  // View,
+  Switch,
   // ListView,
 } from 'react-native';
-import { Container, Text, List, ListItem, Body, Right, Fab, Icon, Header, DeckSwiper, Card, CardItem, Left, Badge } from 'native-base';
+import { Container, Text, Body, Right, Fab, Icon, Header, Left, Badge, Card, CardItem, Button, Content } from 'native-base';
 
 // import styles from './styles';
 // import Header from '../../Header';
@@ -15,30 +16,47 @@ class Home extends Component {
 
   constructor(props) {
     super(props);
-    // this.ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1.id !== r2.id });
-    this.state = {
-      tasksList: [{
+    const tasks = [{
+      id: 1,
+      title: 'task1',
+      completed: false,
+      collection: {
         id: 1,
-        title: 'task1',
-        completed: false,
-        collection: {
-          id: 1,
-          name: 'collection1',
-        },
-        user: {
-          id: 1,
-          name: 'user1',
-          color: 'teal',
-        },
-      }, {
-        id: 2,
-        title: 'task2',
-        completed: true,
-        collection: {
-          id: 1,
-          name: 'collection1',
-        },
-      }],
+        name: 'collection1',
+      },
+      user: {
+        id: 1,
+        name: 'user1',
+        color: 'teal',
+      },
+    }, {
+      id: 2,
+      title: 'task2',
+      completed: true,
+      collection: {
+        id: 1,
+        name: 'collection1',
+      },
+    }];
+    console.log('Old tasks:', tasks);
+    const task = this.props.navigation.state.params ?
+      this.props.navigation.state.params.task : null;
+    const index = this.props.navigation.state.params ?
+      this.props.navigation.state.params.index : null;
+    console.log('index:', index);
+    console.log('show new task:', task);
+    if (task && (index || index === 0)) {
+      console.log('edit task list');
+      tasks[index] = task;
+    } else if (task) {
+      console.log('add new to tasks list');
+      tasks.push(task);
+    }
+
+    console.log('New tasks:', tasks);
+
+    this.state = {
+      tasksList: tasks,
       collectionList: [{
         id: 1,
         name: 'collection1',
@@ -58,11 +76,13 @@ class Home extends Component {
       }],
 
       fabActive: true,
+      switchActive: false,
     };
   }
 
   async componentDidMount() {
     // console.log('componentDidMount');
+
     // let tasksList = [];
     // const URL = 'http://localhost:3000';
     // try {
@@ -76,92 +96,100 @@ class Home extends Component {
     // }
   }
 
-  // deleteRow(secId, rowId, rowMap) {
-  //   console.log('delete');
-  //   console.log('deleteRow', secId, rowId, rowMap);
-  //   const tasks = this.state.tasksList;
-  //   this.setState({
-  //     // fabActive: true,
-  //   });
-  // }
+  taskDone(index) {
+    console.log('Index of task:', index);
+    const tasks = this.state.tasksList;
+    tasks[index].completed = !tasks[index].completed;
 
-  showCard(item) {
-    console.log('Show task card:', item);
     this.setState({
-      // fabActive: true,
+      tasksList: tasks,
+      switchActive: !this.state.switchActive,
     });
   }
-  render() {
-    const tasks = this.state.tasksList;
-    if (this.props.navigation.state.params
-      && this.props.navigation.state.params.newTask) {
-      console.log('New task:', this.props.navigation.state.params.newTask);
-      tasks.push(this.props.navigation.state.params.newTask);
-    }
-    console.log('Tasks:', tasks);
 
+  deleteTask(task, index) {
+    const { tasksList } = this.state;
+    tasksList.splice(index, 1);
+    this.setState({
+      tasksList,
+    });
+  }
+
+  // showCard(item) {
+  //   console.log('Show task card:', item);
+  //   this.setState({
+  //   });
+  // }
+  render() {
+    // const tasks = this.state.tasksList;
+    console.log(this.state.tasksList);
+    console.log('switchActive: ', this.state.switchActive);
     return (
       <Container>
-        <View
-          style={{
-            // alignItems: 'center',
-            marginBottom: 20,
-            marginTop: 0,
-            backgroundColor: 'transparent',
-          }}
-        >
-          <Header />
-          <List
-            dataArray={tasks}
-            renderRow={item => (
-              <ListItem
-                avatar
-                onPress={() => (
-                  <DeckSwiper
-                    dataSource={tasks}
-                    renderItem={task => (
-                      <Card style={{ elevation: 3 }}>
-                        <CardItem>
-                          <Left>
-                            <Body>
-                              <Text>{task.title}</Text>
-                              <Text note>{task.collection.name}</Text>
-                            </Body>
-                          </Left>
-                        </CardItem>
-                        <CardItem>
-                          <Icon name="heart" style={{ color: '#ED4A6A' }} />
-                          <Text>{task.title}</Text>
-                        </CardItem>
-                      </Card>
-                    )}
-                  />
-                )}
-              >
+        <Header />
+        <Content>
+          {this.state.tasksList.map((task, index) => (
+            <Card key={task.id}>
+              <CardItem>
+                <Left>
+                  <Icon name="md-list-box" />
+                  <Body>
+                    <Text>{task.title}</Text>
+                    <Text note>{task.collection.name}</Text>
+                  </Body>
+                </Left>
+                <Right>
+                  <Badge
+                    style={{ backgroundColor: task.user ? task.user.color : 'black' }}
+                  >
+                    <Text>{task.user ? task.user.name : 'no user'}</Text>
+                  </Badge>
+                </Right>
+              </CardItem>
+              <CardItem>
+                <Left>
+                  <Button
+                    transparent
+                    onPress={() => this.props.navigation.navigate('CreateEditTask', {
+                      collectionList: this.state.collectionList,
+                      userList: this.state.userList,
+                      task,
+                      index,
+                    })}
+                  >
+                    <Icon name="ios-create" />
+                    <Text>Edit</Text>
+                  </Button>
+                </Left>
                 <Body>
-                  <Text>{item.title}</Text>
-                  <Text note>{item.collection ? item.collection.name : ''}</Text>
+                  <Button
+                    transparent
+                    onPress={() => this.deleteTask(task, index)}
+                  >
+                    <Icon active name="ios-archive" />
+                    <Text>Delete</Text>
+                  </Button>
                 </Body>
                 <Right>
-                  {item.user ?
-                    <Badge
-                      style={{ backgroundColor: item.user.color }}
-                    >
-                      <Text>{item.user.name}</Text>
-                    </Badge> : null}
+                  <Switch
+                    value={task.completed}
+                    onValueChange={() => this.taskDone(index)}
+                  />
                 </Right>
-              </ListItem>
-            )}
-          />
-        </View>
+              </CardItem>
+            </Card>
+          ))}
+        </Content>
         <Fab
           active={this.state.fabActive}
           containerStyle={{ }}
           style={{ backgroundColor: '#5067FF' }}
           position="bottomRight"
-          onPress={() => this.props.navigation.navigate('CreateTask', {
+          onPress={() => this.props.navigation.navigate('CreateEditTask', {
             collectionList: this.state.collectionList,
             userList: this.state.userList,
+            task: null,
+            index: null,
           })}
         >
           <Icon name="add" />
@@ -173,20 +201,34 @@ class Home extends Component {
 
 export default Home;
 
-// <Container>
-//   <StatusBar barStyle="light-content" />
-//   <View
-//     style={{
-//       alignItems: 'center',
-//       marginBottom: 50,
-//       backgroundColor: 'transparent',
-//     }}
-//   >
-//     <View style={{ marginTop: 50 }} />
-//     <H3>My Home screen</H3>
-//     <View style={{ marginTop: 8 }} />
-//     <H3 style={styles.text}>Fetch test</H3>
-//     <View style={{ marginTop: 8 }} />
-//     <H3>Fetch count: {this.state.posts.length}</H3>
-//   </View>
-// </Container>
+// <List
+//   dataArray={this.state.tasksList}
+//   renderRow={(item, x, index) => (
+//     <ListItem
+//       icon
+//       onPress={() => this.props.navigation.navigate('ShowTask', {
+//         task: item,
+//       })}
+//     >
+//       <Left>
+//         <Icon name="text" />
+//       </Left>
+//       <Body>
+//         <Text>{item.title}</Text>
+//         <Text note>{item.collection ? item.collection.name : ''}</Text>
+//       </Body>
+//       <Right>
+//         {item.user ?
+//           <Badge
+//             style={{ backgroundColor: item.user.color }}
+//           >
+//             <Text>{item.user.name}</Text>
+//           </Badge> : null}
+//         <Switch
+//           value={item.completed /* this.state.switchActive */}
+//           onValueChange={() => this.taskDone(index)}
+//         />
+//       </Right>
+//     </ListItem>
+//   )}
+// />

@@ -2,16 +2,21 @@ import React, { Component } from 'react';
 import { View, Button } from 'react-native';
 import { Container, Form, Item, Input, Picker, Icon, Content, Header } from 'native-base';
 
-class CreateTask extends Component {
-  constructor() {
-    super();
-
+class CreateEditTask extends Component {
+  constructor(props) {
+    super(props);
+    const { task, index } = this.props.navigation.state.params;
+    console.log('Edit:', index);
+    console.log('Edit task:', task);
+    // console.log('Edit task title:', task.title);
     this.state = {
-      title: '',
-      collection: '',
-      user: '',
+      title: task ? task.title : '',
+      collection: task ? task.collection.id : '',
+      user: task && task.user ? task.user.id : '',
       titleError: false,
       collectionError: false,
+      task,
+      index,
     };
   }
 
@@ -25,17 +30,22 @@ class CreateTask extends Component {
         collectionError: true,
       });
     } else {
-      const newTask = {
-        id: 5,
-        title: this.state.title,
-        completed: false,
-      };
+      let { task } = this.state;
+      if (!task) {
+        // Add new task TODO
+        task = {
+          id: 5,
+          completed: false,
+        };
+      }
+      task.title = this.state.title;
+
 
       const collectionList = this.props.navigation.state.params.collectionList ?
         this.props.navigation.state.params.collectionList : [];
       collectionList.forEach((item) => {
         if (item.id === this.state.collection) {
-          newTask.collection = item;
+          task.collection = item;
         }
       });
 
@@ -44,20 +54,24 @@ class CreateTask extends Component {
           this.props.navigation.state.params.userList : [];
         userList.forEach((item) => {
           if (item.id === this.state.collection) {
-            newTask.user = item;
+            task.user = item;
           }
         });
+      } else if (task) {
+        task.user = null;
       }
 
-      console.log('new task before send:', newTask);
+      console.log('new task before send:', task);
       this.props.navigation.navigate('Home', {
-        newTask,
+        task,
+        index: this.state.index,
       });
     }
   }
 
   render() {
     console.log('Task title:', this.state.title);
+    // console.log('Edit:', this.state.index, this.state.task);
     return (
       <Container>
         <Header />
@@ -65,6 +79,7 @@ class CreateTask extends Component {
           <Form>
             <Item error={this.state.titleError}>
               <Input
+                value={this.state.title}
                 onChangeText={text => this.setState({ title: text, titleError: false })}
                 placeholder="Enter task"
               />
@@ -79,7 +94,7 @@ class CreateTask extends Component {
             >
               <Item label="Choose collection" value={0} enabled={false} />
               {this.props.navigation.state.params.collectionList.map(item => (
-                <Item label={item.name} value={item.id} />
+                <Item label={item.name} value={item.id} key={item.id} />
               ))}
             </Picker>
             <Picker
@@ -98,7 +113,7 @@ class CreateTask extends Component {
         </Content>
         <View style={{ flex: 1, width: 'auto', justifyContent: 'flex-end' }}>
           <Button
-            title="Add Task"
+            title={this.state.task ? 'Edit Task' : 'Add Task'}
             color="#841584"
             accessibilityLabel="Learn more about this purple button"
             onPress={() => this.pressOnAddTask()}
@@ -113,4 +128,4 @@ class CreateTask extends Component {
 //   headerTitle: PropTypes.string.isRequired,
 // };
 
-export default CreateTask;
+export default CreateEditTask;
