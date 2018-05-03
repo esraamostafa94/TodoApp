@@ -1,11 +1,11 @@
 import React from 'react';
-// import {
-//   // StyleSheet,
-//   //  Text,
-//   // View,
-// } from 'react-native';
-import { Root } from 'native-base';
+import * as Expo from 'expo';
+
+import { Root, StyleProvider } from 'native-base';
 import { StackNavigator, DrawerNavigator } from 'react-navigation';
+
+import getTheme from './theme/components';
+import variables from './theme/variables/commonColor';
 
 import Home from './screens/home';
 import SideBar from './screens/sidebar';
@@ -45,6 +45,8 @@ const AppNavigator = StackNavigator({
   // EditTask: { screen: EditTask },
   CreateCollection: { screen: CreateCollection },
   CreateUser: { screen: CreateUser },
+
+  SideBar: { screen: SideBar },
 }, {
   initialRouteName: 'Drawer',
   headerMode: 'none',
@@ -55,14 +57,30 @@ export default class App extends React.Component {
     super();
 
     this.state = {
-
+      isReady: false,
     };
+
+    this.loadFonts();
   }
+  async loadFonts() {
+    await Expo.Font.loadAsync({
+      Roboto: require('native-base/Fonts/Roboto.ttf'),
+      Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
+      Ionicons: require('@expo/vector-icons/fonts/Ionicons.ttf'),
+    });
+    this.setState({ isReady: true });
+  }
+
   render() {
+    if (!this.state.isReady) {
+      return <Expo.AppLoading />;
+    }
     return (
-      <Root>
-        <AppNavigator />
-      </Root>
+      <StyleProvider style={getTheme(variables)}>
+        <Root style={{ marginTop: 20 }}>
+          <AppNavigator />
+        </Root>
+      </StyleProvider>
     );
   }
 }

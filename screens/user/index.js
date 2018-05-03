@@ -11,55 +11,59 @@ import {
   Body,
   Fab,
   Icon,
-  Header,
   Badge,
   Right,
 } from 'native-base';
 
 // import styles from './styles';
-// import Header from '../../Header';
+import Header from '../../Header';
 
 class User extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      userList: [{
-        id: 1,
-        name: 'user1',
-        color: 'pink',
-        noTask: 7,
-      }, {
-        id: 2,
-        name: 'user2',
-        color: 'blue',
-        noTask: 4,
-      }],
 
-      fabActive: true,
-    };
-  }
-  render() {
-    const users = this.state.userList;
+    const userList = [{
+      id: 1,
+      name: 'user1',
+      color: 'pink',
+      noTask: 7,
+    }, {
+      id: 2,
+      name: 'user2',
+      color: 'blue',
+      noTask: 4,
+    }];
     if (this.props.navigation.state.params
       && this.props.navigation.state.params.newUser) {
       const { newUser } = this.props.navigation.state.params;
       newUser.noTask = 0;
       console.log('New user:', newUser);
-      users.push(this.props.navigation.state.params.newUser);
+      userList.push(this.props.navigation.state.params.newUser);
     }
-    console.log('users:', users);
+    console.log('users:', userList);
+
+    this.state = {
+      userList,
+      fabActive: true,
+    };
+  }
+  render() {
+    const users = this.state.userList;
 
     return (
       <Container>
         <View
           style={{
             // alignItems: 'center',
-            marginBottom: 20,
-            marginTop: 0,
-            backgroundColor: 'transparent',
+            // marginBottom: 20,
+            // marginTop: 20,
+            // backgroundColor: 'transparent',
           }}
         >
-          <Header />
+          <Header
+            headerTitle="Users List"
+            navigation={this.props.navigation}
+          />
           <List
             dataArray={users}
             renderRow={item => (

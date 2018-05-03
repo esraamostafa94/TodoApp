@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { View, Button } from 'react-native';
-import { Container, Form, Item, Input, Icon, Content, Header } from 'native-base';
+// import { View, Button } from 'react-native';
+import { Container, Form, Item, Input, Icon, Content, Text, Button } from 'native-base';
+import Header from '../../HeaderForm';
 
 class CreateCollection extends Component {
   constructor() {
@@ -34,7 +35,10 @@ class CreateCollection extends Component {
     console.log('Collection title:', this.state.title);
     return (
       <Container>
-        <Header />
+        <Header
+          headerTitle="Add New Collection"
+          navigation={this.props.navigation}
+        />
         <Content>
           <Form>
             <Item error={this.state.titleError}>
@@ -46,13 +50,10 @@ class CreateCollection extends Component {
             </Item>
           </Form>
         </Content>
-        <View style={{ flex: 1, width: 'auto', justifyContent: 'flex-end' }}>
-          <Button
-            title="Add Collection"
-            color="#841584"
-            onPress={() => this.pressOnAddCollection()}
-          />
-        </View>
+        <Button block onPress={() => this.pressOnAddCollection()}>
+          <Text>Add Collection</Text>
+        </Button>
+
       </Container>
     );
   }

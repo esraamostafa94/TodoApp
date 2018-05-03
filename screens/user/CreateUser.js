@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { View, Button } from 'react-native';
-import { Container, Form, Item, Input, Icon, Content, Header, Picker } from 'native-base';
+// import { View, Button } from 'react-native';
+import { Container, Form, Item, Input, Icon, Content, Picker, Text, Button } from 'native-base';
+import Header from '../../HeaderForm';
 
 class CreateUser extends Component {
   constructor() {
@@ -43,7 +44,10 @@ class CreateUser extends Component {
       'blue', 'violet', 'purple', 'pink', 'brown', 'grey', 'black'];
     return (
       <Container>
-        <Header />
+        <Header
+          headerTitle="Add New User"
+          navigation={this.props.navigation}
+        />
         <Content>
           <Form>
             <Item error={this.state.nameError}>
@@ -60,20 +64,16 @@ class CreateUser extends Component {
               selectedValue={this.state.color}
               onValueChange={value => this.setState({ color: value, colorError: false })}
             >
-              <Item label="Choose color" value={0} enabled={false} />
+              <Item label="Choose color" value={0} enabled={false} key={0} />
               {colors.map(item => (
-                <Item label={item} value={item} />
+                <Item label={item} value={item} key={item} />
               ))}
             </Picker>
           </Form>
         </Content>
-        <View style={{ flex: 1, width: 'auto', justifyContent: 'flex-end' }}>
-          <Button
-            title="Add User"
-            color="#841584"
-            onPress={() => this.pressOnAddUser()}
-          />
-        </View>
+        <Button block onPress={() => this.pressOnAddUser()}>
+          <Text>Add User</Text>
+        </Button>
       </Container>
     );
   }

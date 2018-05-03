@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { View, Button } from 'react-native';
-import { Container, Form, Item, Input, Picker, Icon, Content, Header } from 'native-base';
+import { View } from 'react-native';
+import { Container, Form, Item, Input, Picker, Icon, Content, Text, Button } from 'native-base';
+import Header from '../../HeaderForm';
 
 class CreateEditTask extends Component {
   constructor(props) {
@@ -74,7 +75,10 @@ class CreateEditTask extends Component {
     // console.log('Edit:', this.state.index, this.state.task);
     return (
       <Container>
-        <Header />
+        <Header
+          headerTitle={this.props.task ? 'Edit Task' : 'Add New Task'}
+          navigation={this.props.navigation}
+        />
         <Content>
           <Form>
             <Item error={this.state.titleError}>
@@ -92,7 +96,7 @@ class CreateEditTask extends Component {
               selectedValue={this.state.collection}
               onValueChange={value => this.setState({ collection: value, collectionError: false })}
             >
-              <Item label="Choose collection" value={0} enabled={false} />
+              <Item label="Choose collection" value={0} enabled={false} key={0} />
               {this.props.navigation.state.params.collectionList.map(item => (
                 <Item label={item.name} value={item.id} key={item.id} />
               ))}
@@ -104,21 +108,18 @@ class CreateEditTask extends Component {
               selectedValue={this.state.user}
               onValueChange={value => this.setState({ user: value })}
             >
-              <Item label="Choose user" value={0} enabled={false} />
+              <Item label="Choose user" value={0} enabled={false} key={0} />
               {this.props.navigation.state.params.userList.map(item => (
-                <Item label={item.name} value={item.id} />
+                <Item label={item.name} value={item.id} key={item.id} />
               ))}
             </Picker>
           </Form>
         </Content>
-        <View style={{ flex: 1, width: 'auto', justifyContent: 'flex-end' }}>
-          <Button
-            title={this.state.task ? 'Edit Task' : 'Add Task'}
-            color="#841584"
-            accessibilityLabel="Learn more about this purple button"
-            onPress={() => this.pressOnAddTask()}
-          />
-        </View>
+
+        <Button block onPress={() => this.pressOnAddTask()}>
+          <Text>{this.state.task ? 'Edit Task' : 'Add Task'}</Text>
+        </Button>
+
       </Container>
     );
   }

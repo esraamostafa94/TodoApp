@@ -11,50 +11,53 @@ import {
   Body,
   Fab,
   Icon,
-  Header,
 } from 'native-base';
 
 // import styles from './styles';
-// import Header from '../../Header';
+import Header from '../../Header';
 
 class Collection extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      collectionList: [{
-        id: 1,
-        name: 'collection1',
-        noTask: 3,
-      }, {
-        id: 2,
-        name: 'collection2',
-        noTask: 5,
-      }],
-      fabActive: true,
-    };
-  }
-  render() {
-    const collections = this.state.collectionList;
+    const collectionList = [{
+      id: 1,
+      name: 'collection1',
+      noTask: 3,
+    }, {
+      id: 2,
+      name: 'collection2',
+      noTask: 5,
+    }];
     if (this.props.navigation.state.params
       && this.props.navigation.state.params.newCollection) {
       const { newCollection } = this.props.navigation.state.params;
       newCollection.noTask = 0;
       console.log('New collection:', newCollection);
-      collections.push(newCollection);
+      collectionList.push(newCollection);
     }
-    console.log('collections:', collections);
+    console.log('collections:', collectionList);
+    this.state = {
+      collectionList,
+      fabActive: true,
+    };
+  }
+  render() {
+    const collections = this.state.collectionList;
 
     return (
       <Container>
         <View
           style={{
             // alignItems: 'center',
-            marginBottom: 20,
-            marginTop: 0,
-            backgroundColor: 'transparent',
+            // marginBottom: 20,
+            // marginTop: 0,
+            // backgroundColor: 'transparent',
           }}
         >
-          <Header />
+          <Header
+            headerTitle="Collection List"
+            navigation={this.props.navigation}
+          />
           <List
             dataArray={collections}
             renderRow={item => (

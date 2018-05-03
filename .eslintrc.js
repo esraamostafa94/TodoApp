@@ -11,5 +11,6 @@ module.exports = {
       "react/jsx-filename-extension": "off",
       "no-console": "off",
       "react/prop-types": "off",
+      "global-require": "off",
     },
 };

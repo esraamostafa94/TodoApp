@@ -4,10 +4,10 @@ import {
   Switch,
   // ListView,
 } from 'react-native';
-import { Container, Text, Body, Right, Fab, Icon, Header, Left, Badge, Card, CardItem, Button, Content } from 'native-base';
+import { Container, Text, Body, Right, Fab, Icon, Left, Badge, Card, CardItem, Button, Content } from 'native-base';
 
 // import styles from './styles';
-// import Header from '../../Header';
+import Header from '../../Header';
 
 class Home extends Component {
   // static navigationOptions = {
@@ -115,18 +115,16 @@ class Home extends Component {
     });
   }
 
-  // showCard(item) {
-  //   console.log('Show task card:', item);
-  //   this.setState({
-  //   });
-  // }
   render() {
     // const tasks = this.state.tasksList;
     console.log(this.state.tasksList);
     console.log('switchActive: ', this.state.switchActive);
     return (
       <Container>
-        <Header />
+        <Header
+          headerTitle="My TODO List"
+          navigation={this.props.navigation}
+        />
         <Content>
           {this.state.tasksList.map((task, index) => (
             <Card key={task.id}>

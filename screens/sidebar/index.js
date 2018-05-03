@@ -6,34 +6,44 @@ import {
   Container,
   Content,
   Header,
+  Icon,
+  Left,
   // View,
 } from 'native-base';
+import { View } from 'react-native';
+
 import styles from './styles';
 
 const datas = [
   {
     name: 'TODO List',
     route: 'Home',
-    icon: 'home',
+    icon: 'md-list-box',
     bg: '#C5F442',
   },
   {
     name: 'Collection List',
     route: 'Collection',
-    icon: 'phone-portrait',
+    icon: 'ios-list',
     bg: '#C5F442',
   },
   {
     name: 'User List',
     route: 'User',
-    icon: 'phone-portrait',
+    icon: 'ios-person',
     bg: '#C5F442',
   },
 ];
 
 const SideBar = props => (
   <Container>
-    <Header />
+    <View
+      style={{
+        marginTop: 20,
+      }}
+    >
+      <Header />
+    </View>
     <Content
       style={{ flex: 1, backgroundColor: '#fff', top: 1 }}
     >
@@ -45,7 +55,15 @@ const SideBar = props => (
             noBorder
             onPress={() => props.navigation.navigate(item.route)}
           >
-            <Text style={styles.text}>{item.name}</Text>
+            <Left>
+              <Icon
+                active
+                name={item.icon}
+                style={{ color: '#777', fontSize: 26, width: 30 }}
+              />
+              <Text style={styles.text}>{item.name}</Text>
+            </Left>
+
           </ListItem>
         )}
       />
